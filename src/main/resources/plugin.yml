@@ -1,0 +1,7 @@
+name: Hotels
+version: ${project.version}
+main: hotels.Hotels
+api-version: 1.16
+authors: [ Mason ]
+description: HotelsPlugin
+website: masonking.dev
