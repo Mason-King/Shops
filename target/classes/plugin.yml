@@ -1,5 +1,5 @@
 name: Hotels
-version: ${project.version}
+version: 1.0-SNAPSHOT
 main: hotels.Hotels
 api-version: 1.16
 authors: [ Mason ]
