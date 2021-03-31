@@ -1,2 +1,4 @@
-hotels\Utils\Utils.class
+hotels\Cmds\HotelCmd.class
 hotels\Hotels.class
+hotels\Utils\Utils.class
+hotels\Utils\HotelManager.class

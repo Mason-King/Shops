@@ -57,9 +57,9 @@ public class HotelManager {
         try {
             rs = statement.executeQuery("SELECT * FROM hotels WHERE id='"+id+"'");
             if(rs.next()) {
-                String locString = rs.getString("location");
+                String locString = rs.getString("warp");
                 String[] split = locString.split(";");
-                loc = new Location(Bukkit.getWorld(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[2]));
+                loc = new Location(Bukkit.getWorld(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]), Double.valueOf(split[3]));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -76,6 +76,74 @@ public class HotelManager {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setName(String name, String id) {
+        try {
+            statement.executeUpdate("UPDATE hotels SET name= '"+ name +"' WHERE id='"+id+"'");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public String getName(String id) {
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM hotels WHERE id='"+id+"'");
+            if(rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setDescription(String description, String id) {
+        try {
+            statement.executeUpdate("UPDATE hotels SET description= '"+ description +"' WHERE id='"+id+"'");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public String getDescription(String id) {
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM hotels WHERE id='"+id+"'");
+            if(rs.next()) {
+                return rs.getString("description");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getId(String name) {
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM hotels WHERE name='"+ name +"'");
+            if(rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getId(Player p) {
+        ResultSet rs = null;
+        try {
+            rs = statement.executeQuery("SELECT * FROM hotels WHERE Owner='"+ p.getUniqueId().toString() +"'");
+            if(rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }

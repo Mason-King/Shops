@@ -16,6 +16,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import hotels.Gui.WarpsGui;
 import hotels.Hotels;
 import hotels.Utils.HotelManager;
 import hotels.Utils.Utils;
@@ -32,36 +33,51 @@ public class HotelCmd implements CommandExecutor {
         Player p = (Player) commandSender;
         Hotels hotels = Hotels.getInstance();
         HotelManager hm = new HotelManager(hotels);
-        if(args[0].equalsIgnoreCase("create")) {
-                if(args.length == 1) {
-                    p.sendMessage(Utils.chat("&7Sorry, Please specify a id."));
-                } else {
-                    com.sk89q.worldedit.entity.Player actor = BukkitAdapter.adapt(p);
-                    SessionManager manager = WorldEdit.getInstance().getSessionManager();
-                    LocalSession ls = manager.get(actor);
+        if(args.length == 0) {
+            p.sendMessage(Utils.chat("&c&lShops &7| Help menu"));
+            return false;
+        } else if(args[0].equalsIgnoreCase("create")) {
+            if(!(p.hasPermission("shops.region.create"))) return false;
+            if(args.length == 1) {
+                  p.sendMessage(Utils.chat("&7Sorry, Please specify a id."));
+              } else {
+                  com.sk89q.worldedit.entity.Player actor = BukkitAdapter.adapt(p);
+                  SessionManager manager = WorldEdit.getInstance().getSessionManager();
+                  LocalSession ls = manager.get(actor);
+                  Region region = null;
+                  World selectionWorld = ls.getSelectionWorld();
+                  try {
+                      if(selectionWorld == null) throw new IncompleteRegionException();
+                      region = ls.getSelection(selectionWorld);
+                  } catch (IncompleteRegionException e) {
+                      actor.print(TextComponent.of("No region found"));
+                  }
 
-                    Region region = null;
-                    World selectionWorld = ls.getSelectionWorld();
-                    try {
-                        if(selectionWorld == null) throw new IncompleteRegionException();
-                        region = ls.getSelection(selectionWorld);
-                    } catch (IncompleteRegionException e) {
-                        actor.print(TextComponent.of("No region found"));
-                    }
-
-                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                    RegionManager rm = container.get(BukkitAdapter.adapt(p.getWorld()));
-                    ProtectedCuboidRegion r = new ProtectedCuboidRegion(args[1], region.getMaximumPoint(), region.getMinimumPoint());
-                    r.setFlag(Flags.BLOCK_PLACE, StateFlag.State.DENY);
-                    r.setFlag(Flags.BLOCK_BREAK, StateFlag.State.DENY);
-                    r.setFlag(Flags.PVP, StateFlag.State.DENY);
-                    rm.addRegion(r);
-                    Location centerFloor = new Location(p.getWorld(), region.getCenter().getX(), region.getMinimumPoint().getY() + 1, region.getCenter().getZ());
-                    hm.CreateHotel(args[1], centerFloor);
-                    p.sendMessage(Utils.chat("&7Shop region created."));
-                }
+                  RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                  RegionManager rm = container.get(BukkitAdapter.adapt(p.getWorld()));
+                  ProtectedCuboidRegion r = new ProtectedCuboidRegion(args[1], region.getMaximumPoint(), region.getMinimumPoint());
+                  r.setFlag(Flags.BLOCK_PLACE, StateFlag.State.DENY);
+                  r.setFlag(Flags.BLOCK_BREAK, StateFlag.State.DENY);
+                  r.setFlag(Flags.PVP, StateFlag.State.DENY);
+                  rm.addRegion(r);
+                  Location centerFloor = new Location(p.getWorld(), region.getCenter().getX(), region.getMinimumPoint().getY() + 1, region.getCenter().getZ());
+                  hm.CreateHotel(args[1], centerFloor);
+                  p.sendMessage(Utils.chat("&7Shop region created."));
+              }
+        } else if(args[0].equalsIgnoreCase("warp")) {
+            if(args.length == 1) {
+                p.sendMessage(Utils.chat("&c&lShops &7| Invalid usage: /shops warp <player/id>"));
+                return false;
+            } else {
+                String id = hm.getId(args[1]);
+                Location l = hm.getWarp(args[1]);
+                p.teleport(l);
+            }
+        } else if(args[0].equalsIgnoreCase("warps")) {
+            WarpsGui warpsGui = new WarpsGui();
+            warpsGui.gui().show(p);
         }
 
-        return false;
-    }
+      return false;
+  }
 }
