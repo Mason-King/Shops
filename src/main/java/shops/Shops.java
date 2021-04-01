@@ -1,7 +1,7 @@
-package hotels;
+package shops;
 
-import hotels.Cmds.HotelCmd;
-import hotels.Utils.Utils;
+import shops.Cmds.ShopCmd;
+import shops.Utils.Utils;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -11,11 +11,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
 
-public final class Hotels extends JavaPlugin {
+public final class Shops extends JavaPlugin {
 
-    private static Hotels instance;
+    private static Shops instance;
     private Statement statement;
-    String host = "localhost", port = "3306", database = "hotels", username = "root", password = "password";
+    String host = "localhost", port = "3306", database = "shops", username = "root", password = "password";
     public Connection connection;
 
     private static Economy econ = null;
@@ -37,19 +37,21 @@ public final class Hotels extends JavaPlugin {
         try {
             openConnection();
             this.statement = connection.createStatement();
-            PreparedStatement ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS HOTELS (" +
+            PreparedStatement ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS shops (" +
                     "id VARCHAR(32) PRIMARY KEY," +
-                    "Owner VARCHAR(55) NOT NULL," +
+                    "owner VARCHAR(55) NOT NULL," +
                     "warp VARCHAR(55)," +
                     "name VARCHAR(32)," +
+                    "price INT," +
                     "description VARCHAR(64)" +
                     ");");
             ps.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             Bukkit.getServer().getConsoleSender().sendMessage(Utils.chat("&c&LCould not enable due to invalid database"));
+            e.printStackTrace();
         }
 
-        getCommand("hotels").setExecutor(new HotelCmd());
+        getCommand("shops").setExecutor(new ShopCmd());
 
         saveResource("warpsGui.yml", false);
 
@@ -60,7 +62,7 @@ public final class Hotels extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public static Hotels getInstance() {
+    public static Shops getInstance() {
         return instance;
     }
 

@@ -1,6 +1,6 @@
-package hotels.Gui;
+package shops.Gui;
 
-import hotels.Hotels;
+import shops.Shops;
 import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class Gui implements Listener {
     List<String> viewing = new ArrayList<>();
 
     public Gui(String name, int size, int pagesize) {
-        plugin = Hotels.getInstance();
+        plugin = Shops.getInstance();
         this.gui = this;
         this.name = color(name)[0];
         this.size = size == 1 ? 1 : getInventorySize(size);
@@ -57,7 +57,7 @@ public class Gui implements Listener {
     }
 
     public Gui(String name, List<ItemStack> pagesize) {
-        plugin = Hotels.getInstance();
+        plugin = Shops.getInstance();
         this.gui = this;
         this.name = color(name)[0];
         this.size = size == 1 ? 1 : getInventorySize(size);
@@ -75,7 +75,7 @@ public class Gui implements Listener {
     }
 
     public Gui(String name, int size) {
-        plugin = Hotels.getInstance();
+        plugin = Shops.getInstance();
         this.gui = this;
         this.name = color(name)[0];
         this.size = size == 1 ? 1 : getInventorySize(size);

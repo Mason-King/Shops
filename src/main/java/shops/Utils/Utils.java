@@ -1,7 +1,7 @@
-package hotels.Utils;
+package shops.Utils;
 
-import hotels.Gui.Gui;
-import hotels.Hotels;
+import shops.Gui.Gui;
+import shops.Shops;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -40,7 +40,7 @@ public class Utils {
     }
 
     public static YamlConfiguration loadConfig(String s) {
-        File file = new File(Hotels.getInstance().getDataFolder().getAbsolutePath() + s);
+        File file = new File(Shops.getInstance().getDataFolder().getAbsolutePath() + s);
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         return config;
     }

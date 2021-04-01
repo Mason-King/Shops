@@ -1,16 +1,16 @@
 title: "&c&lShop Warps"
-size: 54
+size: 45
 
 format:
   - '# # # # # # # # #'
   - '# # # # # # # # #'
   - '# # # # # # # # #'
   - '# # # # # # # # #'
-  - '$ $ $ < & > $ $ 4'
+  - '$ $ $ < & > $ $ $'
 
-nextPage: >
-previous: <
-close: &
+nextPage: '>'
+previous: '<'
+close: '&'
 
 items:
   '$':
@@ -30,3 +30,9 @@ items:
     name: "&c&lNext Page"
     lore:
       - "&7&o(( Click here to go forward a page ))"
+  '&':
+    material: BARRIER
+    amount: 1
+    name: "&c&lClose"
+    lore:
+      - "&7&o(( Click here to close ))"

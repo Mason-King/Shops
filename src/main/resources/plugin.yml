@@ -1,9 +1,9 @@
-name: Hotels
+name: Shops
 version: ${project.version}
-main: hotels.Hotels
+main: shops.Shops
 api-version: 1.16
 authors: [ Mason ]
-description: HotelsPlugin
+description: ShopPlugin
 website: masonking.dev
 commands:
-  hotels:
+  shops:

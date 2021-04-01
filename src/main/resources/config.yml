@@ -1,0 +1,17 @@
+unclaimedName: "&c&lUnclaimed lot"
+unclaimedLore:
+  - ""
+  - "&7Purchase this lot to"
+  - "&7Create your personal shop"
+  - ""
+  - "&c&lId: &7{id}"
+  - "&c&lCost: &7{price}"
+  - "&7&o(( Right-Click to purchase ))"
+claimedName: "&c&l{name}"
+claimedLore:
+    - ""
+    - "&c&lOwner&7: {player}"
+    - "&c&lId&7: {id}"
+    - "&c&lDescription: {description}"
+    - ""
+    - "&7&o(( Right-Click to warp ))"

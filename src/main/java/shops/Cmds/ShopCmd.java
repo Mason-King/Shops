@@ -1,4 +1,4 @@
-package hotels.Cmds;
+package shops.Cmds;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
@@ -9,37 +9,37 @@ import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.util.formatting.text.TextComponent;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import hotels.Gui.WarpsGui;
-import hotels.Hotels;
-import hotels.Utils.HotelManager;
-import hotels.Utils.Utils;
-import org.bukkit.Bukkit;
+import shops.Gui.WarpsGui;
+import shops.Shops;
+import shops.Utils.ShopManager;
+import shops.Utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class HotelCmd implements CommandExecutor {
+import java.util.List;
+
+public class ShopCmd implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Player p = (Player) commandSender;
-        Hotels hotels = Hotels.getInstance();
-        HotelManager hm = new HotelManager(hotels);
+        Shops shops = Shops.getInstance();
+        ShopManager hm = new ShopManager(shops);
         if(args.length == 0) {
-            p.sendMessage(Utils.chat("&c&lShops &7| Help menu"));
+            WarpsGui warpsGui = new WarpsGui();
+            warpsGui.gui().show(p);
             return false;
         } else if(args[0].equalsIgnoreCase("create")) {
             if(!(p.hasPermission("shops.region.create"))) return false;
-            if(args.length == 1) {
-                  p.sendMessage(Utils.chat("&7Sorry, Please specify a id."));
+            if(args.length == 2) {
+                  p.sendMessage(Utils.chat("&7Invalid use try /shops create <id> <price>"));
               } else {
                   com.sk89q.worldedit.entity.Player actor = BukkitAdapter.adapt(p);
                   SessionManager manager = WorldEdit.getInstance().getSessionManager();
@@ -62,6 +62,7 @@ public class HotelCmd implements CommandExecutor {
                   rm.addRegion(r);
                   Location centerFloor = new Location(p.getWorld(), region.getCenter().getX(), region.getMinimumPoint().getY() + 1, region.getCenter().getZ());
                   hm.CreateHotel(args[1], centerFloor);
+                  hm.setPrice(Integer.valueOf(args[2]), args[1]);
                   p.sendMessage(Utils.chat("&7Shop region created."));
               }
         } else if(args[0].equalsIgnoreCase("warp")) {
