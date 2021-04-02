@@ -8,9 +8,9 @@ format:
   - '# # # # # # # # #'
   - '$ $ $ < & > $ $ $'
 
-nextPage: '>'
-previous: '<'
-close: '&'
+nextPage: 41
+previous: 39
+close: 40
 
 items:
   '$':

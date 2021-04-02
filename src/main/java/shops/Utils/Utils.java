@@ -1,5 +1,8 @@
 package shops.Utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.meta.SkullMeta;
 import shops.Gui.Gui;
 import shops.Shops;
 import org.bukkit.ChatColor;
@@ -12,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Utils {
 
@@ -84,6 +88,20 @@ public class Utils {
             }
 
         }
+    }
+
+    public static List<String> split(String s) {
+        String[] split = s.split(" ");
+        List<String> finalStringList = new ArrayList<>();
+        String finalString = "";
+        for(int i = 0; i < split.length; i++) {
+            finalString+=split[i] + " ";
+            if(i >0 && i % 5 == 0) {
+                finalStringList.add(finalString);
+                finalString = "";
+            }
+        }
+        return finalStringList;
     }
 
 }

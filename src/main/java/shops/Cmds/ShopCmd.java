@@ -14,6 +14,9 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import shops.Gui.WarpsGui;
 import shops.Shops;
 import shops.Utils.ShopManager;
@@ -23,7 +26,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import sun.security.util.ArrayUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ShopCmd implements CommandExecutor {
@@ -31,15 +36,17 @@ public class ShopCmd implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         Player p = (Player) commandSender;
         Shops shops = Shops.getInstance();
-        ShopManager hm = new ShopManager(shops);
+        ShopManager sm = new ShopManager(shops);
+        FileConfiguration config = shops.getConfig();
         if(args.length == 0) {
             WarpsGui warpsGui = new WarpsGui();
             warpsGui.gui().show(p);
             return false;
         } else if(args[0].equalsIgnoreCase("create")) {
             if(!(p.hasPermission("shops.region.create"))) return false;
-            if(args.length == 2) {
-                  p.sendMessage(Utils.chat("&7Invalid use try /shops create <id> <price>"));
+            if(args.length <= 2) {
+                  p.sendMessage(Utils.chat(config.getString("messages.createInvalid")));
+                  return false;
               } else {
                   com.sk89q.worldedit.entity.Player actor = BukkitAdapter.adapt(p);
                   SessionManager manager = WorldEdit.getInstance().getSessionManager();
@@ -50,7 +57,7 @@ public class ShopCmd implements CommandExecutor {
                       if(selectionWorld == null) throw new IncompleteRegionException();
                       region = ls.getSelection(selectionWorld);
                   } catch (IncompleteRegionException e) {
-                      actor.print(TextComponent.of("No region found"));
+                      actor.print(TextComponent.of(Utils.chat(config.getString("messages.noRegion"))));
                   }
 
                   RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -61,22 +68,27 @@ public class ShopCmd implements CommandExecutor {
                   r.setFlag(Flags.PVP, StateFlag.State.DENY);
                   rm.addRegion(r);
                   Location centerFloor = new Location(p.getWorld(), region.getCenter().getX(), region.getMinimumPoint().getY() + 1, region.getCenter().getZ());
-                  hm.CreateHotel(args[1], centerFloor);
-                  hm.setPrice(Integer.valueOf(args[2]), args[1]);
-                  p.sendMessage(Utils.chat("&7Shop region created."));
+                  sm.CreateHotel(args[1], centerFloor, Integer.valueOf(args[2]));
+                  p.sendMessage(Utils.chat(config.getString("messages.shopCreated")));
               }
-        } else if(args[0].equalsIgnoreCase("warp")) {
-            if(args.length == 1) {
-                p.sendMessage(Utils.chat("&c&lShops &7| Invalid usage: /shops warp <player/id>"));
-                return false;
+        } else if(args[0].equalsIgnoreCase("setname")) {
+            if(args.length <= 2) {
+                p.sendMessage(Utils.chat(config.getString("messages.nameInvalid")));
+            } else if(sm.getId(p) == null) {
+                p.sendMessage(Utils.chat(config.getString("messages.noShop")));
             } else {
-                String id = hm.getId(args[1]);
-                Location l = hm.getWarp(args[1]);
-                p.teleport(l);
+                String id = sm.getId(p);
+                sm.setName(args[2], id);
             }
-        } else if(args[0].equalsIgnoreCase("warps")) {
-            WarpsGui warpsGui = new WarpsGui();
-            warpsGui.gui().show(p);
+        } else if(args[0].equalsIgnoreCase("setdescription")) {
+            if(args.length <= 2) {
+                p.sendMessage(Utils.chat(config.getString("messages.descriptionInvalid")));
+            } else if(sm.getId(p) == null) {
+                p.sendMessage(Utils.chat(config.getString("messages.noShop")));
+            } else {
+                String id = sm.getId(p);
+                sm.setDescription(String.join(" ",  Arrays.copyOfRange(args, 2, args.length)), args[1]);
+            }
         }
 
       return false;

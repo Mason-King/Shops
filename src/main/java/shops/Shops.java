@@ -53,6 +53,8 @@ public final class Shops extends JavaPlugin {
 
         getCommand("shops").setExecutor(new ShopCmd());
 
+        saveDefaultConfig();
+
         saveResource("warpsGui.yml", false);
 
     }
@@ -98,6 +100,18 @@ public final class Shops extends JavaPlugin {
         connection = DriverManager.getConnection("jdbc:mysql://"
                         + this.host + ":" + this.port + "/" + this.database,
                 this.username, this.password);
+    }
+
+    public static Economy getEconomy() {
+        return econ;
+    }
+
+    public static Permission getPermissions() {
+        return perms;
+    }
+
+    public static Chat getChat() {
+        return chat;
     }
 
 }

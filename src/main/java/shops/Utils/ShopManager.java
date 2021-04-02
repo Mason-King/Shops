@@ -30,10 +30,10 @@ public class ShopManager {
         }
     }
 
-    public void CreateHotel(String id, Location l) {
+    public void CreateHotel(String id, Location l, int i) {
         String s = l.getWorld().getName() + ";" + l.getX() + ";" + l.getY() + ";" + l.getZ();
         try {
-            statement.executeUpdate("INSERT INTO shops (id, owner, Warp) VALUES ('" + id  + "', 'null', '" + s + "')");
+            statement.executeUpdate("INSERT INTO shops (id, owner, Warp, price) VALUES ('" + id  + "', 'null', '" + s + "', '"+ i +"')");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
