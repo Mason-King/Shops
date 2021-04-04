@@ -93,6 +93,10 @@ public class WarpsGui {
                 sm.setOwner(p, id);
                 sm.setName(p.getName(), id);
                 sm.setDescription("", id);
+                if(econ.getBalance(Bukkit.getOfflinePlayer(p.getUniqueId())) < Integer.valueOf(sm.getPrice(id))) {
+                    p.sendMessage(Utils.chat(shops.getConfig().getString("messages.noFunds")));
+                    return;
+                }
                 econ.withdrawPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()), Integer.valueOf(sm.getPrice(id)));
                 p.sendMessage(Utils.chat(shops.getConfig().getString("messages.shopPurchased")));
                 p.closeInventory();
