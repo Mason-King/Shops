@@ -15,7 +15,7 @@ public final class Shops extends JavaPlugin {
 
     private static Shops instance;
     private Statement statement;
-    String host = "localhost", port = "3306", database = "shops", username = "root", password = "password";
+    String host = this.getConfig().getString("host"), port = this.getConfig().getString("port") , database = this.getConfig().getString("database"), username = this.getConfig().getString("username"), password = this.getConfig().getString("password");
     public Connection connection;
 
     private static Economy econ = null;
@@ -28,6 +28,7 @@ public final class Shops extends JavaPlugin {
         instance = this;
 
         if (!setupEconomy() ) {
+            System.out.println("1");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -53,10 +54,20 @@ public final class Shops extends JavaPlugin {
 
         getCommand("shops").setExecutor(new ShopCmd());
 
-        saveDefaultConfig();
-
         saveResource("warpsGui.yml", false);
 
+    }
+
+    public static Economy getEconomy() {
+        return econ;
+    }
+
+    public static Permission getPermissions() {
+        return perms;
+    }
+
+    public static Chat getChat() {
+        return chat;
     }
 
     @Override
@@ -100,18 +111,6 @@ public final class Shops extends JavaPlugin {
         connection = DriverManager.getConnection("jdbc:mysql://"
                         + this.host + ":" + this.port + "/" + this.database,
                 this.username, this.password);
-    }
-
-    public static Economy getEconomy() {
-        return econ;
-    }
-
-    public static Permission getPermissions() {
-        return perms;
-    }
-
-    public static Chat getChat() {
-        return chat;
     }
 
 }
