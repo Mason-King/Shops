@@ -15,7 +15,7 @@ public final class Shops extends JavaPlugin {
 
     private static Shops instance;
     private Statement statement;
-    String host = "localhost", port = "3306", database = "shops", username = "root", password = "password";
+    String host = this.getConfig().getString("host"), port = this.getConfig().getString("port"), database = this.getConfig().getString("database"), username = this.getConfig().getString("username"), password = this.getConfig().getString("password");
     public Connection connection;
 
     private static Economy econ = null;
