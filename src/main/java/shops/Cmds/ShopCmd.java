@@ -9,10 +9,12 @@ import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.util.formatting.text.TextComponent;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -88,6 +90,36 @@ public class ShopCmd implements CommandExecutor {
             } else {
                 String id = sm.getId(p);
                 sm.setDescription(String.join(" ",  Arrays.copyOfRange(args, 2, args.length)), args[1]);
+            }
+        } else if(args[0].equalsIgnoreCase("import")) {
+            if(p.hasPermission("Shops.import")) {
+                for(int i = 0; i < 352; i++) {
+                    RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                    RegionManager rm = container.get(BukkitAdapter.adapt(p.getWorld()));
+                    ProtectedRegion region = rm.getRegion(String.valueOf(i));
+
+                    //Get top location
+                    Location top = new Location(p.getWorld(), 0, 0, 0);
+                    top.setX(region.getMaximumPoint().getX());
+                    top.setY(region.getMaximumPoint().getY());
+                    top.setZ(region.getMaximumPoint().getZ());
+
+                    //Get bottom location
+                    Location bottom = new Location(p.getWorld(), 0, 0, 0);
+                    bottom.setX(region.getMinimumPoint().getX());
+                    bottom.setY(region.getMinimumPoint().getY());
+                    bottom.setZ(region.getMinimumPoint().getZ());
+
+                    //Split difference
+                    double X =  ((bottom.getX() - top.getX())/2) + bottom.getX();
+                    double Y =  ((bottom.getY() - top.getY())/2) + bottom.getY();
+                    double Z =  ((bottom.getZ() - top.getZ())/2) + bottom.getZ();
+
+                    Location centerFloor = new Location(p.getWorld(), X , Y, Z);
+                    sm.CreateHotel(String.valueOf(i), centerFloor, i);
+                }
+            } else {
+                return false;
             }
         }
 
