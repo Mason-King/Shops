@@ -93,10 +93,13 @@ public class ShopCmd implements CommandExecutor {
             }
         } else if(args[0].equalsIgnoreCase("import")) {
             if(p.hasPermission("Shops.import")) {
-                for(int i = 0; i < 352; i++) {
+                for(int i = 1; i < 352; i++) {
+                    System.out.println(i);
                     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                     RegionManager rm = container.get(BukkitAdapter.adapt(p.getWorld()));
                     ProtectedRegion region = rm.getRegion(String.valueOf(i));
+
+                    System.out.println(region.getId());
 
                     //Get top location
                     Location top = new Location(p.getWorld(), 0, 0, 0);
@@ -112,7 +115,7 @@ public class ShopCmd implements CommandExecutor {
 
                     //Split difference
                     double X =  ((bottom.getX() - top.getX())/2) + bottom.getX();
-                    double Y =  ((bottom.getY() - top.getY())/2) + bottom.getY();
+                    double Y =  bottom.getY() + 1;
                     double Z =  ((bottom.getZ() - top.getZ())/2) + bottom.getZ();
 
                     Location centerFloor = new Location(p.getWorld(), X , Y, Z);
