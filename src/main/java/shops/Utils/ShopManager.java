@@ -180,6 +180,7 @@ public class ShopManager {
         }
         return null;
     }
+    //
 
     public String getId(String name) {
         ResultSet rs = null;
