@@ -1,3 +1,10 @@
+#Mysql:
+host: localhost
+port: 3306
+database: shops
+username: root
+password: password
+
 unclaimedName: "&c&lUnclaimed lot"
 unclaimedLore:
   - ""
@@ -25,3 +32,4 @@ messages:
   nameInvalid: "&c&lShops &7| Invalid usage try: /shops setname <id> <name>"
   descriptionInvalid: "&c&lShops &7| Invalid usage try: /shops setdescription <id> <description>"
   shopPurchased: "&c&lShops &7| Shop lot has been purchased."
+  noFunds: "&c&lShops &7| Insufficient money"

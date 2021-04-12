@@ -1,3 +1,10 @@
+#Mysql:
+host: localhost
+port: 3306
+database: shops
+username: root
+password: password
+
 unclaimedName: "&c&lUnclaimed lot"
 unclaimedLore:
   - ""
