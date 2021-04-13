@@ -94,33 +94,23 @@ public class ShopCmd implements CommandExecutor {
         } else if(args[0].equalsIgnoreCase("import")) {
             if(p.hasPermission("Shops.import")) {
                 for(int i = 1; i < 352; i++) {
-                    System.out.println(i);
                     RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                     RegionManager rm = container.get(BukkitAdapter.adapt(p.getWorld()));
                     ProtectedRegion region = rm.getRegion(String.valueOf(i));
 
-                    System.out.println(region.getId());
+                    if(region == null) {
+                        p.sendMessage(Utils.chat("&c&lShops &7| Shops imported"));
+                        return false;
+                    }
 
-                    //Get top location
-                    Location top = new Location(p.getWorld(), 0, 0, 0);
-                    top.setX(region.getMaximumPoint().getX());
-                    top.setY(region.getMaximumPoint().getY());
-                    top.setZ(region.getMaximumPoint().getZ());
-
-                    //Get bottom location
-                    Location bottom = new Location(p.getWorld(), 0, 0, 0);
-                    bottom.setX(region.getMinimumPoint().getX());
-                    bottom.setY(region.getMinimumPoint().getY());
-                    bottom.setZ(region.getMinimumPoint().getZ());
-
-                    //Split difference
-                    double X =  ((bottom.getX() - top.getX())/2) + bottom.getX();
-                    double Y =  bottom.getY() + 1;
-                    double Z =  ((bottom.getZ() - top.getZ())/2) + bottom.getZ();
+                    double X = (region.getMinimumPoint().getX() + region.getMaximumPoint().getX())/2;
+                    double Y = region.getMinimumPoint().getY() + 1;
+                    double Z = (region.getMinimumPoint().getZ() + region.getMaximumPoint().getZ())/2;
 
                     Location centerFloor = new Location(p.getWorld(), X , Y, Z);
                     sm.CreateHotel(String.valueOf(i), centerFloor, i);
                 }
+                p.sendMessage(Utils.chat("&c&lShops &7| Shops imported"));
             } else {
                 return false;
             }
