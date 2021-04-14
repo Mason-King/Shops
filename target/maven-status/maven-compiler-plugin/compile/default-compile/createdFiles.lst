@@ -1,4 +1,10 @@
-hotels\Cmds\HotelCmd.class
-hotels\Hotels.class
-hotels\Utils\Utils.class
-hotels\Utils\HotelManager.class
+shops\Gui\WarpsGui.class
+shops\Shops.class
+shops\Utils\ShopManager.class
+shops\Gui\Gui$openEvent.class
+shops\Gui\Gui$clickEvent.class
+shops\Cmds\ShopCmd.class
+shops\Gui\Gui$closeEvent.class
+shops\Gui\Gui$dragEvent.class
+shops\Utils\Utils.class
+shops\Gui\Gui.class
