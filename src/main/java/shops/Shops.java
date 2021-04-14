@@ -1,5 +1,13 @@
 package shops;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.plugin.Plugin;
 import shops.Cmds.ShopCmd;
 import shops.Utils.Utils;
 import net.milkbowl.vault.chat.Chat;
@@ -10,8 +18,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.*;
+import java.util.List;
 
-public final class Shops extends JavaPlugin {
+public final class Shops extends JavaPlugin implements Listener {
 
     private static Shops instance;
     private Statement statement;
@@ -57,11 +66,36 @@ public final class Shops extends JavaPlugin {
 
         saveResource("warpsGui.yml", false);
 
+        Bukkit.getPluginManager().registerEvents(this, this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    CoreProtectAPI CoreProtect = getCoreProtect();
+    @EventHandler
+    public void onBreak(BlockBreakEvent e) {
+        Player p = e.getPlayer();
+        Block b = e.getBlock();
+
+        CoreProtectAPI CoreProtect = getCoreProtect();
+        if (CoreProtect!=null){ //Ensure we have access to the API
+            List<String[]> lookup = CoreProtect.blockLookup(b, 0);
+            if (lookup!=null){
+                for (String[] value : lookup){
+                    CoreProtectAPI.ParseResult result = CoreProtect.parseResult(value);
+                    List<String> blocked = this.getConfig().getStringList("blockedBlocks");
+                    if(blocked.contains(result.getPlayer()) && !p.isOp()) {
+                        e.setCancelled(true);
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
     public static Shops getInstance() {
@@ -112,6 +146,28 @@ public final class Shops extends JavaPlugin {
 
     public static Chat getChat() {
         return chat;
+    }
+
+    private CoreProtectAPI getCoreProtect() {
+        Plugin plugin = getServer().getPluginManager().getPlugin("CoreProtect");
+
+        // Check that CoreProtect is loaded
+        if (plugin == null || !(plugin instanceof CoreProtect)) {
+            return null;
+        }
+
+        // Check that the API is enabled
+        CoreProtectAPI CoreProtect = ((net.coreprotect.CoreProtect) plugin).getAPI();
+        if (CoreProtect.isEnabled() == false) {
+            return null;
+        }
+
+        // Check that a compatible version of the API is loaded
+        if (CoreProtect.APIVersion() < 6) {
+            return null;
+        }
+
+        return CoreProtect;
     }
 
 }

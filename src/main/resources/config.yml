@@ -23,6 +23,8 @@ claimedLore:
     - ""
     - "&7&o(( Right-Click to warp ))"
 
+blockedBlocks:
+  - "GenGummy"
 
 messages:
   createInvalid: "&c&lShops &7| Invalid usage try: /shops create <id> <price>"
