@@ -19,12 +19,10 @@ claimedLore:
     - ""
     - "&c&lOwner&7: {player}"
     - "&c&lId&7: {id}"
-    - "&c&lDescription&7: {description}"
+    - "&c&lDescription: {description}"
     - ""
     - "&7&o(( Right-Click to warp ))"
-
-blockedBlocks:
-  - "GenGummy"
+    -
 
 messages:
   createInvalid: "&c&lShops &7| Invalid usage try: /shops create <id> <price>"

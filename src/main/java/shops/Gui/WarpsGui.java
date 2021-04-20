@@ -14,10 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class WarpsGui {
 
@@ -30,14 +27,28 @@ public class WarpsGui {
     ShopManager sm = new ShopManager(shops);
 
     public Gui gui() {
-        warpsGui = new Gui(Utils.chat(config.getString("title")), config.getInt("size"))
+        warpsGui = new Gui(Utils.chat(config.getString("title")), config.getInt("size"), config.getInt("size"))
                 .c();
 
         List<String> format = config.getStringList("format");
         Utils.makeFormat(config, warpsGui, format, "items");
+        System.out.println(Utils.getInv());
         List<String> ids = sm.getIds();
         int key = 0;
+        int page = 0;
         for(String s : ids) {
+            if(key == 36) {
+                page++;
+                key = 0;
+            }
+            if(page > 0) {
+                HashMap<Integer, ItemStack> inv = Utils.getInv();
+                for(int i = 1; i <= page; i++) {
+                    for(Map.Entry e : inv.entrySet()) {
+                        warpsGui.setItemPage(i, (Integer) e.getKey(), (ItemStack) e.getValue());
+                    }
+                }
+            }
             if(!sm.getOwner(s).equals("null")) {
                 OfflinePlayer op = (Bukkit.getOfflinePlayer(UUID.fromString(sm.getOwner(s))));
                 ItemStack i = new ItemStack(Material.PLAYER_HEAD, 1, (short)3);
@@ -55,7 +66,7 @@ public class WarpsGui {
                 }
                 skm.setLore(lore);
                 i.setItemMeta(skm);
-                warpsGui.i(i);
+                warpsGui.setItemPage(page, i);
                 slot.put(key, "claimed");
                 idSlot.put(key, s);
                 key++;
@@ -70,12 +81,11 @@ public class WarpsGui {
                 }
                 skm.setLore(lore);
                 i.setItemMeta(skm);
-                warpsGui.i(i);
+                warpsGui.setItemPage(page, key, i);
                 slot.put(key, "unclaimed");
                 idSlot.put(key, s);
                 key++;
             }
-
         }
 
         warpsGui.onClick(e -> {

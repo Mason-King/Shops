@@ -24,15 +24,6 @@ claimedLore:
     - "&7&o(( Right-Click to warp ))"
     -
 
-#MYSQL information:
-host: 'localhost'
-port: '3306'
-database: 'shops'
-username: 'root'
-password: 'password'
-blockedBlocks:
-  - "GenGummy"
-
 messages:
   createInvalid: "&c&lShops &7| Invalid usage try: /shops create <id> <price>"
   noRegion: "&c&lShops &7| No region found"

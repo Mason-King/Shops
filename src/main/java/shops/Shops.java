@@ -92,7 +92,7 @@ public final class Shops extends JavaPlugin implements Listener {
         Block b = e.getBlock();
 
         CoreProtectAPI CoreProtect = getCoreProtect();
-        if (CoreProtect!=null){ //Ensure we have access to the API
+        if (CoreProtect!=null){
             List<String[]> lookup = CoreProtect.blockLookup(b, 0);
             if (lookup!=null){
                 for (String[] value : lookup){
@@ -145,18 +145,6 @@ public final class Shops extends JavaPlugin implements Listener {
         connection = DriverManager.getConnection("jdbc:mysql://"
                         + this.host + ":" + this.port + "/" + this.database,
                 this.username, this.password);
-    }
-
-    public static Economy getEconomy() {
-        return econ;
-    }
-
-    public static Permission getPermissions() {
-        return perms;
-    }
-
-    public static Chat getChat() {
-        return chat;
     }
 
     private CoreProtectAPI getCoreProtect() {

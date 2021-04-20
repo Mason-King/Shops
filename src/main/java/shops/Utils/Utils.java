@@ -2,6 +2,7 @@ package shops.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.meta.SkullMeta;
 import shops.Gui.Gui;
 import shops.Shops;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,12 +51,16 @@ public class Utils {
         return config;
     }
 
+    public static HashMap<Integer, ItemStack> inv = new HashMap<>();
+
+    public static HashMap<Integer, ItemStack> getInv() {
+        return inv;
+    }
+
     public static void makeFormat(FileConfiguration config, Gui gui, List<String> toFormat, String keyForItems) {
 
         int size = gui.getInventory().getSize();
-
         if(toFormat.size() == size / 9) {
-
             for(int i = 0; i < (size / 9); i++) {
                 String s = toFormat.get(i);
                 for(int z = 0; z < 9; z++) {
@@ -70,6 +76,7 @@ public class Utils {
                             im.setLore(chat(config.getStringList(keyForItems + "." + individual + ".lore")));
                             stack.setItemMeta(im);
                             gui.i((9 * i) + z, stack);
+                            inv.put((9 * i) + z, stack);
                         }
                     } else {
                         if(config.get(keyForItems + "." + individual) == null) {
@@ -81,6 +88,7 @@ public class Utils {
                             im.setLore(chat(config.getStringList(keyForItems + "." + individual + ".lore")));
                             stack.setItemMeta(im);
                             gui.i(z, stack);
+                            inv.put((9 * i) + z, stack);
                         }
                     }
                 }
